@@ -1,0 +1,7 @@
+{
+  "name": "unleashed-application",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Thomas Koelling",
+  "license": "MIT"
+}
