@@ -1,6 +1,6 @@
+import Prisma from '@prisma/client';
 
-import Prisma from '@prisma/client'
-const prisma = new Prisma.PrismaClient()
+const prisma = new Prisma.PrismaClient();
 
 // await prisma.user.create({data: {name:'thomas', email: 'thomas@thomas.de', password:'hau'}})
 // await prisma.user.delete({
@@ -9,9 +9,9 @@ const prisma = new Prisma.PrismaClient()
 //     }
 // })
 const users = await prisma.user.findMany({
-    select: {
-        name: true,
-        password: true,
-    },
-})
-console.log('users', users)
+  select: {
+    name: true,
+    password: true,
+  },
+});
+console.log('users', users);
