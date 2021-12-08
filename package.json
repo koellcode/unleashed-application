@@ -6,7 +6,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon --es-module-specifier-resolution=node src/server"
+    "dev:server": "nodemon --es-module-specifier-resolution=node src/server",
+    "dev:client": "parcel src/client/index.html"
   },
   "dependencies": {
     "@prisma/client": "^3.6.0",
@@ -25,6 +26,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "nodemon": "^2.0.15",
+    "parcel": "^2.0.1",
     "prettier": "^2.5.1"
   }
 }
