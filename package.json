@@ -6,10 +6,12 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon server.js"
+    "start:dev": "nodemon --es-module-specifier-resolution=node src/server"
   },
   "dependencies": {
     "@prisma/client": "^3.6.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
     "prisma": "^3.6.0"
   },
   "devDependencies": {
