@@ -1,6 +1,11 @@
+import validateUser from '../../../common/validation/user';
+
 export default (db) => {
   return {
-    register: (user) => db.user.create({ data: user }),
+    register: (user) => {
+      validateUser(user);
+      return db.user.create({ data: user });
+    },
     getUserByEmail: (email) =>
       db.user.findUnique({
         select: {
