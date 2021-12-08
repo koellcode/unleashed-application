@@ -12,4 +12,9 @@ app.use(bodyParser.json());
 
 app.use(userApi(prisma));
 
+app.use((error, req, res, next) => {
+  console.log('Error Handling Middleware called');
+  return res.status(500).send();
+});
+
 app.listen(3000);
