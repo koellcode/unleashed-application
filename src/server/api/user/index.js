@@ -68,6 +68,14 @@ const userApi = (db) => {
     })
   );
 
+  app.post(
+    '/logout',
+    asyncHandler(async (req, res) => {
+      res.clearCookie('JWT_TOKEN');
+      res.status(200).send();
+    })
+  );
+
   return app;
 };
 
