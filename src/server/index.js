@@ -4,7 +4,10 @@ import bodyParser from 'body-parser';
 import serve from 'express-static';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 import userApi from './api/user';
+
+dotenv.config();
 
 // eslint-disable-next-line
 const __dirname = path.dirname(new URL(import.meta.url).pathname);

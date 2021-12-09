@@ -13,6 +13,7 @@ export default (db) => {
         select: {
           name: true,
           password: true,
+          email: true,
         },
         where: {
           email,
