@@ -10,6 +10,17 @@ const userApi = (db) => {
   const app = express();
   const users = userService(db);
 
+  app.get(
+    '/user',
+    asyncHandler(async (req, res) => {
+      try {
+        const user = jwt.verify(req.cookies.JWT_TOKEN, process.env.TOKEN_SECRET);
+        return res.send(user);
+      } catch (error) {
+        return res.status(401).send();
+      }
+    })
+  );
   app.post(
     '/login',
     asyncHandler(async (req, res) => {

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Login, Signup } from './features/login/routes';
+import { Welcome } from './features/user/routes';
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<h2>loggedin</h2>} />
+        <Route path="/" element={<Welcome />} />
       </Routes>
     </Router>
   );
