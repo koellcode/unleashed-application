@@ -2,6 +2,7 @@
 import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import fetch from '../../../lib/fetch';
 
 function LoginForm({ onSuccess }) {
   const [errorMessage, setErrorMessage] = useState();
@@ -16,22 +17,9 @@ function LoginForm({ onSuccess }) {
     fetch('/api/login', {
       method: 'POST',
       body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(() => {
-        onSuccess();
-      })
-      .catch(() => {
-        setErrorMessage('login failed');
-      });
+      .then(() => onSuccess())
+      .catch(() => setErrorMessage('login failed'));
   }, []);
   return (
     <form onSubmit={handleSubmit}>

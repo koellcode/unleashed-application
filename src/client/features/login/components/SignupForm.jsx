@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validateUser from '../../../../common/validation/user';
 import { LOGIN_MESSAGES } from '../utils/messages';
+import fetch from '../../../lib/fetch';
 
 function SignupForm({ onSuccess }) {
   const [errorMessage, setErrorMessage] = useState();
@@ -26,22 +27,9 @@ function SignupForm({ onSuccess }) {
     fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(() => {
-        onSuccess();
-      })
-      .catch(() => {
-        setErrorMessage('sign up failed');
-      });
+      .then(() => onSuccess())
+      .catch(() => setErrorMessage('sign up failed'));
   }, []);
   return (
     <form onSubmit={handleSubmit}>

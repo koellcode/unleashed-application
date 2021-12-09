@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import fetch from '../../../lib/fetch';
 
 function Welcome() {
   const navigate = useNavigate();
   const [username, setUserName] = useState();
   useEffect(() => {
-    fetch('/api/user', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    fetch('/api/user')
       .then((user) => {
         setUserName(user.name);
       })
