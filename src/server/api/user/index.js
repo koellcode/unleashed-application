@@ -1,5 +1,6 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
+import Prisma from '@prisma/client';
 import { UserError } from '../../../common/validation/user';
 import userService from '../../services/user';
 
@@ -17,6 +18,13 @@ const userApi = (db) => {
         if (error instanceof UserError) {
           return res.status(400).json({ message: error.message });
         }
+        if (
+          error instanceof Prisma.Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          return res.status(400).json({ message: 'emailnotavailableerror' });
+        }
+
         throw error;
       }
     })
