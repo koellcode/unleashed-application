@@ -25,6 +25,17 @@ describe('Login', () => {
     cy.get('h2').should('contain.text', 'superuser');
   });
 
+  it('should logout', () => {
+    cy.get('#email').type('super@user.de');
+    cy.get('#password').type('superuser1');
+    cy.get('form').submit();
+
+    cy.get('button').click();
+    cy.location('pathname').should('include', 'login');
+    cy.visit('http://localhost:3000');
+    cy.location('pathname').should('include', 'login');
+  });
+
   it('should switch to signup page', () => {
     cy.get('a').click();
     cy.location('pathname').should('include', 'signup');
