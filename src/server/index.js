@@ -5,6 +5,7 @@ import serve from 'express-static';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import userApi from './api/user';
 
 dotenv.config();
@@ -31,10 +32,15 @@ app.use((req, res, next) => {
   }
 
   // check valid token here later
-  if (req.cookies.JWT_TOKEN) {
-    return next();
+  if (!req.cookies.JWT_TOKEN) {
+    return res.redirect('/login');
   }
-  return res.redirect('/login');
+  try {
+    jwt.verify(req.cookies.JWT_TOKEN, process.env.TOKEN_SECRET);
+  } catch (error) {
+    return res.redirect('/login');
+  }
+  return next();
 });
 
 app.get(['/login', '/signup'], (req, res) =>

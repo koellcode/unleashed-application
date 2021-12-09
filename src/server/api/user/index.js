@@ -25,13 +25,13 @@ const userApi = (db) => {
         return res.status(401).send();
       }
 
-      const token = jwt.sign(user, process.env.TOKEN_SECRET);
+      const token = jwt.sign({ ...user, password: undefined }, process.env.TOKEN_SECRET);
       res.cookie('JWT_TOKEN', token, {
         // secure: true,
         httpOnly: true,
         // domain: `.${DOMAIN}`,
       });
-      return res.json(user);
+      return res.json({ ...user, password: undefined, id: undefined });
     })
   );
   app.post(
@@ -39,7 +39,13 @@ const userApi = (db) => {
     asyncHandler(async (req, res) => {
       try {
         const user = await users.register(req.body);
-        return res.json(user);
+        const token = jwt.sign({ ...user, password: undefined }, process.env.TOKEN_SECRET);
+        res.cookie('JWT_TOKEN', token, {
+          // secure: true,
+          httpOnly: true,
+          // domain: `.${DOMAIN}`,
+        });
+        return res.json({ ...user, password: undefined });
       } catch (error) {
         if (error instanceof UserError) {
           return res.status(400).json({ message: error.message });

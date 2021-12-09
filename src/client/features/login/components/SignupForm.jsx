@@ -1,8 +1,42 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import validateUser from '../../../../common/validation/user';
 
-function SignupForm() {
+function SignupForm({ onSuccess }) {
+  const handleSubmit = useCallback((event) => {
+    event.preventDefault();
+    const user = {
+      email: event.target.elements.email.value,
+      password: event.target.elements.password.value,
+      name: event.target.elements.name.value,
+    };
+
+    validateUser(user);
+
+    fetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then(() => {
+        onSuccess();
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, []);
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <div className="mb-4">
         <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="email">
           E-Mail
@@ -37,7 +71,7 @@ function SignupForm() {
         />
       </div>
       <div className="flex items-center justify-between">
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="button">
+        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="submit">
           Sign up
         </button>
         <Link
@@ -48,8 +82,12 @@ function SignupForm() {
           Login ?
         </Link>
       </div>
-    </>
+    </form>
   );
 }
+
+SignupForm.propTypes = {
+  onSuccess: PropTypes.func.isRequired,
+};
 
 export default SignupForm;
