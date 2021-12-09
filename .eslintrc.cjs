@@ -18,5 +18,11 @@ module.exports = {
     'import/prefer-default-export': 0,
     'no-unused-expressions': 0,
     'no-confusing-arrow': 0,
+    'react/function-component-definition': [
+      2,
+      {
+        namedComponents: 'function-declaration',
+      },
+    ],
   },
 };
