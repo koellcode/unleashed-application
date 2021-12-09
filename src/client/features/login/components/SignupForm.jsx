@@ -81,7 +81,6 @@ function SignupForm({ onSuccess }) {
       <p className={`mb-4 text-red-800 text-xs italic ${errorMessage ? 'visible' : 'invisible'}`}>
         {errorMessage || 'empty'}
       </p>
-
       <div className="flex items-center justify-between">
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="submit">
           Sign up

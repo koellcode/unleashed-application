@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function LoginForm({ onSuccess }) {
+  const [errorMessage, setErrorMessage] = useState();
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
+    setErrorMessage();
     const user = {
       email: event.target.elements.email.value,
       password: event.target.elements.password.value,
@@ -27,8 +29,8 @@ function LoginForm({ onSuccess }) {
       .then(() => {
         onSuccess();
       })
-      .catch((err) => {
-        console.log({ err });
+      .catch(() => {
+        setErrorMessage('login failed');
       });
   }, []);
   return (
@@ -44,7 +46,7 @@ function LoginForm({ onSuccess }) {
           placeholder="email"
         />
       </div>
-      <div className="mb-6">
+      <div className="mb-2">
         <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="password">
           Password
         </label>
@@ -55,6 +57,9 @@ function LoginForm({ onSuccess }) {
           placeholder="******************"
         />
       </div>
+      <p className={`mb-4 text-red-800 text-xs italic ${errorMessage ? 'visible' : 'invisible'}`}>
+        {errorMessage || 'empty'}
+      </p>
       <div className="flex items-center justify-between">
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="submit">
           Log In
