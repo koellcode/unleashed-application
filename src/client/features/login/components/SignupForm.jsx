@@ -1,19 +1,27 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validateUser from '../../../../common/validation/user';
+import { LOGIN_MESSAGES } from '../utils/messages';
 
 function SignupForm({ onSuccess }) {
+  const [errorMessage, setErrorMessage] = useState();
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
+    setErrorMessage();
     const user = {
       email: event.target.elements.email.value,
       password: event.target.elements.password.value,
       name: event.target.elements.name.value,
     };
 
-    validateUser(user);
+    try {
+      validateUser(user);
+    } catch (error) {
+      setErrorMessage(LOGIN_MESSAGES[error.message] || 'unknown valdation error');
+      return;
+    }
 
     fetch('/api/register', {
       method: 'POST',
@@ -31,8 +39,8 @@ function SignupForm({ onSuccess }) {
       .then(() => {
         onSuccess();
       })
-      .catch((err) => {
-        console.log({ err });
+      .catch(() => {
+        setErrorMessage('sign up failed');
       });
   }, []);
   return (
@@ -59,7 +67,7 @@ function SignupForm({ onSuccess }) {
           placeholder="name"
         />
       </div>
-      <div className="mb-6">
+      <div className="mb-2">
         <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="password">
           Password
         </label>
@@ -70,6 +78,10 @@ function SignupForm({ onSuccess }) {
           placeholder="******************"
         />
       </div>
+      <p className={`mb-4 text-red-800 text-xs italic ${errorMessage ? 'visible' : 'invisible'}`}>
+        {errorMessage || 'empty'}
+      </p>
+
       <div className="flex items-center justify-between">
         <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="submit">
           Sign up
