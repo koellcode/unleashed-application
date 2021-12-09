@@ -20,7 +20,7 @@ export default (db) => {
       },
     });
   const isValid = async (user) => {
-    const foundUser = getUserByEmail(user.email);
+    const foundUser = await getUserByEmail(user.email);
     if (!foundUser) {
       return false;
     }
