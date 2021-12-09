@@ -1,35 +1,17 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import validateUser from '../../../../common/validation/user';
-import { LOGIN_MESSAGES } from '../utils/messages';
-import fetch from '../../../lib/fetch';
+
+import { useSignup } from '../api';
 
 function SignupForm({ onSuccess }) {
-  const [errorMessage, setErrorMessage] = useState();
+  const { signup, error, loading } = useSignup();
+
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
-    setErrorMessage();
-    const user = {
-      email: event.target.elements.email.value,
-      password: event.target.elements.password.value,
-      name: event.target.elements.name.value,
-    };
-
-    try {
-      validateUser(user);
-    } catch (error) {
-      setErrorMessage(LOGIN_MESSAGES[error.message] || 'unknown valdation error');
-      return;
-    }
-
-    fetch('/api/register', {
-      method: 'POST',
-      body: JSON.stringify(user),
-    })
-      .then(() => onSuccess())
-      .catch(() => setErrorMessage('sign up failed'));
+    const { email, password, name } = event.target.elements;
+    signup(email.value, password.value, name.value).then((success) => success && onSuccess());
   }, []);
   return (
     <form onSubmit={handleSubmit}>
@@ -42,6 +24,7 @@ function SignupForm({ onSuccess }) {
           id="email"
           type="text"
           placeholder="email"
+          disabled={loading}
         />
       </div>
       <div className="mb-4">
@@ -53,6 +36,7 @@ function SignupForm({ onSuccess }) {
           id="name"
           type="text"
           placeholder="name"
+          disabled={loading}
         />
       </div>
       <div className="mb-2">
@@ -64,13 +48,18 @@ function SignupForm({ onSuccess }) {
           id="password"
           type="password"
           placeholder="******************"
+          disabled={loading}
         />
       </div>
-      <p className={`mb-4 text-red-800 text-xs italic ${errorMessage ? 'visible' : 'invisible'}`}>
-        {errorMessage || 'empty'}
+      <p className={`mb-4 text-red-800 text-xs italic ${error ? 'visible' : 'invisible'}`}>
+        {error || 'empty'}
       </p>
       <div className="flex items-center justify-between">
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" type="submit">
+        <button
+          className={`bg-blue-${loading ? '100' : '500'} text-white font-bold py-2 px-4 rounded`}
+          type="submit"
+          disabled={loading}
+        >
           Sign up
         </button>
         <Link
