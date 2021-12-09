@@ -2,7 +2,7 @@ import express from 'express';
 import asyncHandler from 'express-async-handler';
 import Prisma from '@prisma/client';
 import jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+
 import { UserError } from '../../../common/validation/user';
 import userService from '../../services/user';
 
@@ -13,17 +13,12 @@ const userApi = (db) => {
   app.post(
     '/login',
     asyncHandler(async (req, res) => {
-      const user = await users.getUserByEmail(req.body.email);
-
-      if (!user) {
-        return res.status(401).send();
-      }
-
-      const valid = await bcrypt.compare(req.body.password, user.password);
-
+      const valid = await users.isValid(req.body);
       if (!valid) {
         return res.status(401).send();
       }
+
+      const user = await users.getUserByEmail(req.body.email);
 
       const token = jwt.sign({ ...user, password: undefined }, process.env.TOKEN_SECRET);
       res.cookie('JWT_TOKEN', token, {
