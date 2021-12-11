@@ -6,10 +6,16 @@ First, install:
 yarn install
 ```
 
-Second, run the development server:
+Second, run the client build:
 
 ```bash
-yarn dev:server
+yarn dev:client
+```
+
+Third, run the development server:
+
+```bash
+yarn dev:client
 ```
 
 
